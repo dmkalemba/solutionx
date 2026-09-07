@@ -258,7 +258,8 @@
       projectDetails: document.getElementById('projectDetails').value,
       submittedAt: new Date().toISOString()
     };
-
+    console.log('Payload being sent:', payload);
+    
     fetch('https://hook.us2.make.com/krc4mbibbcd2td6ssynkdxjr9peyd27l', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
