@@ -246,37 +246,32 @@
     &copy; Intelligent Automation & Integration Solutions. All rights reserved.
   </footer>
 
-<script>
-  document.getElementById('leadForm').addEventListener('submit', function (e) {
-    e.preventDefault();
+document.getElementById('contactForm').addEventListener('submit', async function(e) {
+    e.preventDefault(); // Prevents normal HTML page refresh
 
-    const payload = {
-      fullName: document.getElementById('fullName').value,
-      email: document.getElementById('email').value,
-      company: document.getElementById('company').value,
-      primaryFocus: document.getElementById('primaryFocus').value,
-      projectDetails: document.getElementById('projectDetails').value,
-      submittedAt: new Date().toISOString()
-    };
-    console.log('Payload being sent:', payload);
-    
-    fetch('https://hook.us2.make.com/krc4mbibbcd2td6ssynkdxjr9peyd27l', {
-      method: 'POST',
-      headers: { 'Content-Type': 'text/plain' },
-      body: JSON.stringify(payload)
-    })
-    .then(response => {
-      if (!response.ok) {
-        throw new Error(`Server responded with status: ${response.status}`);
+    const formData = new FormData(this);
+    const payload = Object.fromEntries(formData.entries());
+    payload.SubmittedAt = new Date().toISOString();
+
+    try {
+      const response = await fetch('YOUR_MAKE_WEBHOOK_URL_HERE', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(payload)
+      });
+
+      if (response.ok) {
+        alert('Form submitted successfully!');
+        this.reset();
+      } else {
+        alert('Submission failed with status: ' + response.status);
       }
-      // Only reset form and show confirmation if the request succeeds
-      document.getElementById('leadForm').reset();
-      document.getElementById('confirmation').style.display = 'block';
-    })
-    .catch(error => {
-      console.error('Submission failed:', error);
-      alert('There was an issue sending your request. Please check your connection or try again later.');
-    });
+    } catch (error) {
+      console.error('Error submitting form:', error);
+      alert('An error occurred during submission.');
+    }
   });
 </script>
 
