@@ -246,38 +246,38 @@
     &copy; Intelligent Automation & Integration Solutions. All rights reserved.
   </footer>
 
-  <script>
-  async function sendFormDataToMake(formData) {
-  const webhookUrl = 'https://hook.us2.make.com/krc4mbibbcd2td6ssynkdxjr9peyd27l'; // Replace with your actual Make webhook URL
+<script>
+  document.getElementById('leadForm').addEventListener('submit', function (e) {
+    e.preventDefault();
 
-  const payload = {
-    fullName: formData.fullName,
-    email: formData.email,
-    company: formData.company,
-    primaryFocus: formData.primaryFocus,
-    projectDetails: formData.projectDetails,
-    SubmittedAt: new Date().toISOString()
-  };
+    const payload = {
+      fullName: document.getElementById('fullName').value,
+      email: document.getElementById('email').value,
+      company: document.getElementById('company').value,
+      primaryFocus: document.getElementById('primaryFocus').value,
+      projectDetails: document.getElementById('projectDetails').value,
+      submittedAt: new Date().toISOString()
+    };
 
-  try {
-    const response = await fetch(webhookUrl, {
+    fetch('https://hook.us2.make.com/krc4mbibbcd2td6ssynkdxjr9peyd27l', {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload)
+    })
+    .then(response => {
+      if (!response.ok) {
+        throw new Error(`Server responded with status: ${response.status}`);
+      }
+      // Only reset form and show confirmation if the request succeeds
+      document.getElementById('leadForm').reset();
+      document.getElementById('confirmation').style.display = 'block';
+    })
+    .catch(error => {
+      console.error('Submission failed:', error);
+      alert('There was an issue sending your request. Please check your connection or try again later.');
     });
-
-    if (response.ok) {
-      console.log('Form data successfully sent to Make!');
-    } else {
-      console.error('Server responded with error code:', response.status);
-    }
-  } catch (error) {
-    console.error('Network or request error:', error);
-  }
-}
-  </script>
+  });
+</script>
 
 </body>
 </html>
