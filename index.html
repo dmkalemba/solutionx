@@ -247,33 +247,36 @@
   </footer>
 
   <script>
-    document.getElementById('leadForm').addEventListener('submit', function(e) {
-      e.preventDefault();
+  async function sendFormDataToMake(formData) {
+  const webhookUrl = 'YOUR_MAKE_WEBHOOK_URL_HERE'; // Replace with your actual Make webhook URL
 
-      const payload = {
-        fullName: document.getElementById('fullName').value,
-        email: document.getElementById('email').value,
-        company: document.getElementById('company').value,
-        primaryFocus: document.getElementById('primaryFocus').value,
-        projectDetails: document.getElementById('projectDetails').value,
-        submittedAt: new Date().toISOString()
-      };
+  const payload = {
+    fullName: formData.fullName,
+    email: formData.email,
+    company: formData.company,
+    primaryFocus: formData.primaryFocus,
+    projectDetails: formData.projectDetails,
+    SubmittedAt: new Date().toISOString()
+  };
 
-      console.log('Form Submission Captured:', payload);
-
-      // Webhook Integration Point:
-      // Replace WEBHOOK_URL_HERE with your Make/Zapier Webhook URL to capture leads automatically.
-     
-      fetch('https://hook.us2.make.com/krc4mbibbcd2td6ssynkdxjr9peyd27l', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload)
-      });
-     
-
-      document.getElementById('leadForm').reset();
-      document.getElementById('confirmation').style.display = 'block';
+  try {
+    const response = await fetch(webhookUrl, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(payload)
     });
+
+    if (response.ok) {
+      console.log('Form data successfully sent to Make!');
+    } else {
+      console.error('Server responded with error code:', response.status);
+    }
+  } catch (error) {
+    console.error('Network or request error:', error);
+  }
+}
   </script>
 
 </body>
