@@ -263,13 +263,13 @@
 
       // Webhook Integration Point:
       // Replace WEBHOOK_URL_HERE with your Make/Zapier Webhook URL to capture leads automatically.
-      /*
-      fetch('WEBHOOK_URL_HERE', {
+      
+      fetch('http://localhost:5678/webhook-test/c6b08a12-242a-482c-8f54-34b13162369c', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload)
       });
-      */
+      
 
       document.getElementById('leadForm').reset();
       document.getElementById('confirmation').style.display = 'block';
