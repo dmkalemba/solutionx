@@ -124,51 +124,57 @@
     </form>
   </div>
 
-  <script>
-    const WEBHOOK_URL = 'https://hook.us2.make.com/krc4mbibbcd2td6ssynkdxjr9peyd27l';
+<script>
+  const WEBHOOK_URL = 'https://hook.us2.make.com/krc4mbibbcd2td6ssynkdxjr9peyd27l';
 
-    document.getElementById('webhookForm').addEventListener('submit', async function(e) {
-      e.preventDefault();
+  document.getElementById('webhookForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
 
-      const submitBtn = document.getElementById('submitBtn');
-      const statusMessage = document.getElementById('statusMessage');
+    const submitBtn = document.getElementById('submitBtn');
+    const statusMessage = document.getElementById('statusMessage');
 
-      submitBtn.disabled = true;
-      submitBtn.innerText = 'Submitting...';
-      statusMessage.innerText = '';
-      statusMessage.className = 'status-message';
+    submitBtn.disabled = true;
+    submitBtn.innerText = 'Submitting...';
+    statusMessage.innerText = '';
+    statusMessage.className = 'status-message';
 
-      const formData = new FormData(this);
-      const payload = Object.fromEntries(formData.entries());
-      payload.submittedAt = new Date().toISOString();
+    // 1. Construct payload in exact field order and case matching your Make Data store
+    const payload = {
+      fullName: document.getElementById('fullName').value.trim(),
+      email: document.getElementById('email').value.trim(),
+      company: document.getElementById('company').value.trim(),
+      primaryFocus: document.getElementById('primaryFocus').value.trim(),
+      projectDetails: document.getElementById('projectDetails').value.trim(),
+      submittedAt: new Date().toISOString() // Dynamically calculated at execution time
+    };
 
-      try {
-        const response = await fetch(WEBHOOK_URL, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify(payload)
-        });
+    try {
+      const response = await fetch(WEBHOOK_URL, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'applicatin/json' // Bypasses CORS preflight check while passing JSON
+        },
+        body: JSON.stringify(payload)
+      });
 
-        if (response.ok) {
-          statusMessage.innerText = 'Form submitted successfully!';
-          statusMessage.classList.add('success');
-          this.reset();
-        } else {
-          statusMessage.innerText = `Submission failed (Error: ${response.status}). Please try again.`;
-          statusMessage.classList.add('error');
-        }
-      } catch (error) {
-        console.error('Error submitting form:', error);
-        statusMessage.innerText = 'An error occurred while sending the form.';
+      if (response.ok) {
+        statusMessage.innerText = 'Form submitted successfully!';
+        statusMessage.classList.add('success');
+        this.reset();
+      } else {
+        statusMessage.innerText = `Submission failed (Error: ${response.status}). Please try again.`;
         statusMessage.classList.add('error');
-      } finally {
-        submitBtn.disabled = false;
-        submitBtn.innerText = 'Submit';
       }
-    });
-  </script>
+    } catch (error) {
+      console.error('Error submitting form:', error);
+      statusMessage.innerText = 'An error occurred while sending the form.';
+      statusMessage.classList.add('error');
+    } finally {
+      submitBtn.disabled = false;
+      submitBtn.innerText = 'Submit';
+    }
+  });
+</script>
 
 </body>
 </html>
