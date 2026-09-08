@@ -152,7 +152,7 @@
       const response = await fetch(WEBHOOK_URL, {
         method: 'POST',
         headers: {
-          'Content-Type': 'applicatin/json' // Bypasses CORS preflight check while passing JSON
+          'Content-Type': 'application/json' // Bypasses CORS preflight check while passing JSON
         },
         body: JSON.stringify(payload)
       });
